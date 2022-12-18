@@ -1,0 +1,34 @@
+-PRACTICA 4-
+11. select COUNT(prv_num)
+    from proveedores;
+12. select MAX(peso_min), MIN(peso_max)
+    from pesos;
+13. select COUNT(tda_num) AS "Numero_de_tiendas", COUNT(distinct tda_pob), COUNT(distinct tda_ger)
+    from tiendas;
+14. select AVG(art_peso) AS "Media_pesos"
+    from articulos;
+15. select COUNT(vnt_cant), vnt_fch
+    from ventas
+    GROUP BY vnt_fch;
+16. select COUNT(clt_num), clt_pob
+    from clientes
+    GROUP BY clt_pob
+    HAVING COUNT(clt_num)>1;
+17. select MAX(art_peso), AVG(art_pc), AVG(art_pv)
+    from articulos
+    WHERE art_peso!="NULL"
+    GROUP BY art_nom
+    HAVING AVG(art_pv)>20;
+    ORDER BYMAX(art_peso) DESC;
+18. SELECT vnt_tda 'Tienda', COUNT(vnt_fch) 'Num Ventas', SUM(vnt_cant) 'Num Total Ventas'
+    from ventas
+    WHERE vnt_tda BETWEEN 10 and 20
+    GROUP BY vnt_tda;
+19. SELECT clt_pob 'Ciudad', clt_pais 'Pais', COUNT(clt_num) 'Num clientes'
+    from clientes
+    GROUP BY clt_pob, clt_pais;
+20. select art_prv, art_col, COUNT(art_col) AS "Cantidad", ROUND(AVG(art_pc),2) AS "Media"
+    from articulos
+    WHERE NOT(art_col LIKE 'morado' AND art_col LIKE 'negro')
+    GROUP BY art_prv, art_col
+    ORDER BY COUNT(art_col) DESC;

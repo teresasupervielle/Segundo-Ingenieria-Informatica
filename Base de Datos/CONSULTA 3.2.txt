@@ -1,0 +1,79 @@
+CONSULTA 3.2
+----------------
+1. select *
+   from articulos
+   WHERE art_peso > ANY
+	(select art_peso
+	from articulos
+	WHERE art_col="morado");
+2. select *
+   from tiendas
+   where tda_num =
+	(select vnt_tda
+	from ventas
+	GROUP BY vnt_tda 
+	HAVING COUNT (*) >= ALL 
+		(select COUNT (*)
+		from ventas
+		GROUP BY vnt_tda);
+3. select *
+   from clientes
+   WHERE (clt_pais, clt_pob) =
+	(select clt_pais, clt_pob
+	from clientes
+	WHERE clt_num=24);
+4. select *
+   from ventas v1
+   WHERE vnt_fch >= ALL
+	(select vnt_fch
+	from ventas v2
+	WHERE v1.vnt_art = v2.vnt_art)
+   order by vnt_art ASC;
+5. select *
+   from tiendas
+   WHERE EXISTS
+	(select *
+	from ventas
+	WHERE tda_num = vnt_tda);
+6. select *
+   from articulos
+   WHERE NOT EXISTS
+	(select *
+	from ventas
+	WHERE EXISTS(
+		select *
+		from clientes
+		WHERE clt_pob = 'Madrid' AND vnt_clt = clt_num)
+	AND art_num = vnt_art);
+7. select *
+   from clientes 
+   WHERE clt_pob IN ('Madrid', 'Barcelona') AND clt_num IN 
+	(select vnt_clt
+	from ventas
+	GROUP BY vnt_clt
+	HAVING COUNT(*)<2);
+8. select *
+   from proveedores
+   WHERE EXISTS
+	(select *
+	from articulos
+	WHERE art_prv = prv_num);
+9. select *
+   from tiendas
+   WHERE tda_num NOT IN
+	(select vnt_tda
+	from ventas
+	WHERE vnt_art IN
+		(select art_num
+		from articulos
+		WHERE art_nom LIKE 'boligrafo%'));
+10. select *
+    from clientes
+    WHERE clt_pais = 'e' AND clt_num IN
+	(select vnt_clt
+	from ventas
+	GROUP BY vnt_clt
+	HAVING SUM(vnt_cant) >
+		(select SUM(vnt_cant)
+		from ventas
+		WHERE vnt_clt = 17));

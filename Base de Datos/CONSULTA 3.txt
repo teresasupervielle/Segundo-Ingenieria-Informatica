@@ -1,0 +1,79 @@
+1. select *
+   from articulos
+   WHERE art_peso<
+   	(select art_peso
+   	from articulos
+   	WHERE art_num=2)
+   ORDER BY art_peso ASC;
+2. select *
+   from proveedores
+   WHERE prv_num IN
+   	(select art_prv
+   	from articulos);
+3. select vnt_fch
+   from ventas
+   WHERE vnt_art IN
+   	(select art_num
+   	from articulos
+   	WHERE art_nom='impresora') 
+   OR vnt_clt IN 
+   	(select clt_num
+   	from clientes
+   	WHERE clt_pob='Madrid');
+4. select * 
+   from clientes 
+   WHERE clt_pais='e' AND clt_nom!='Pablo' AND clt_pob IN
+   	(select clt_pob
+   	from clientes
+   	WHERE clt_nom='Pablo')
+   ORDER BY clt_num;
+5. select *
+   from tiendas
+   WHERE tda_num IN 
+   	(select vnt_tda
+   	from ventas
+   	WHERE vnt_art IN
+   		(select art_num
+   		from articulos
+   		WHERE art_col='azul'));
+6. select * 
+   from articulos
+   WHERE art_pv >ALL
+   	(select art_pv
+   	from articulos
+   	WHERE art_col='blanco');
+7. select *
+   from clientes
+   WHERE clt_num IN
+   	(select vnt_clt
+   	from ventas
+   	GROUP BY vnt_clt
+   	HAVING COUNT(vnt_clt)>3);
+8. select * 
+   from tiendas
+   WHERE tda_num IN
+   	(select vnt_clt
+   	from ventas
+   	WHERE vnt_clt IN
+   		(select clt_num
+   		from clientes
+   		WHERE clt_pob='Madrid'));
+9. select *
+   from articulos
+   WHERE art_pc>
+   	(select MIN(art_pv)
+   	from articulos
+   	WHERE art_col='malva');
+10. select *
+    from proveedores
+    WHERE prv_num IN
+    	(select art_prv
+    	from articulos
+    	WHERE art_num IN
+    		(select vnt_art
+    		from ventas
+    		GROUP BY vnt_art
+		HAVING COUNT(vnt_art)>=ALL
+    			(select COUNT(vnt_art)
+			from ventas
+			GROUP BY vnt_art)));
